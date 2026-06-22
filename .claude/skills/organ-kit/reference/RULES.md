@@ -74,6 +74,13 @@ Default order inside an organ:
 6. UI / workflow detail
 7. optimization (incl. token compression, caching)
 
+**A good worked example** to copy the shape of: `ProductCatalog` (owns products)
+→ `Inventory.preview_adjust` (projects the result of a stock change *without
+writing*; asks before going negative) → a **replay harness** that rebuilds
+inventory state from the event log alone. It exercises everything at once: a
+cross-organ dependency through a contract (not internals), preview-before-write,
+ask-before-create, and "the log is the source of truth, state is a projection".
+
 **Rule, not a straitjacket:** a task that lands in a later step before an
 earlier one is finished is **deferred by default** — mark it deferred, note why,
 and return to the missing bone first. It is *not* "invalid". Throwaway spikes to
@@ -83,6 +90,31 @@ before its port + a failing test exist is the one hard "no".
 
 ("Models" is intentionally not a numbered step: domain models are bone and live
 in step 1/4; serving an ML model is tissue and lives in step 5+.)
+
+**Track every deferral.** Deferring is allowed; hiding is not. Each out-of-order
+or spike item gets one honest block in a `DEFERRED.md` (template ships in the
+kit): `why_deferred`, `risk`, `must_close_before_promotion`, `owner_decision_needed`,
+`status`. An organ cannot be promoted `sandbox/ -> project/` while any
+`must_close_before_promotion: true` item is still open.
+
+## 9. Definition of Done — two tiers
+A newcomer's most common mistake is calling a *prototype* "done". Separate the
+two so nobody over-claims:
+
+**Learning / prototype done** (a spike is finished when):
+- you can state **what you learned** (the contract/shape it revealed), and
+- every shortcut is **logged in `DEFERRED.md`** with its risk.
+- Throwaway code is fine here — it does NOT count as implementation.
+
+**Implementation done** (a real layer is finished when):
+- its **harness/tests pass** (the failing test from step 3 now passes),
+- **no unguarded external writes** — every external write goes through a
+  `SafetyGate`, and `python tools/graphify.py --strict` reports no shadows,
+- the **boundary is clean**: domain imports no I/O; ports/adapters are thin; the
+  organ depends on others only through declared contracts,
+- the manifest is accurate (ports, depends_on, owns_data, external_writes).
+
+Only *implementation done* work is eligible for promotion to `project/`.
 
 ## What this kit deliberately does NOT do
 - No mandatory message broker, no mandatory DB, no mandatory cloud. Start with

@@ -36,9 +36,14 @@ turning into one tangled blob.
    dry-run preview + explicit approval; reversible work auto-approves.
 8. **Skeleton-first inside an organ** (bone before tissue): skeleton → ports →
    a failing test → domain logic → adapters → UI → optimization. Work that jumps
-   ahead is *deferred* (note why, finish the bone first), not invalid; learning
-   spikes are fine. System-wide, still build a vertical slice first. See
-   `reference/RULES.md` §8.
+   ahead is *deferred* (log it in `DEFERRED.md` — never hide it), not invalid;
+   learning spikes are fine. System-wide, still build a vertical slice first.
+   See `reference/RULES.md` §8.
+9. **Two-tier "done"** (`reference/RULES.md` §9): *learning done* = you can state
+   what you learned + logged every shortcut in `DEFERRED.md`. *implementation
+   done* = tests pass + no unguarded external writes (`graphify --strict` clean) +
+   clean boundary. Only *implementation done* may be promoted to `project/`.
+   Never claim implementation-done for a prototype.
 
 ## Built-in framework features
 - **Hexagonal OOP** scaffolding for every organ.

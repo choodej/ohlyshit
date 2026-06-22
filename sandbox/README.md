@@ -36,3 +36,18 @@ python tools/graphify.py                         # สร้างสารบ�
 ```
 
 ต่อ Telegram จริง: ตั้ง `TELEGRAM_BOT_TOKEN` แล้ว `python organs/registry/app.py --telegram`
+
+## เส้นตัวอย่างที่ 2: catalog → inventory (preview) → replay
+
+โชว์แนวคิดครบชุดในเส้นเดียว (ดู RULES.md §8):
+- `catalog` = ทะเบียนสินค้า (upstream)
+- `inventory` ขึ้นกับ catalog **ผ่าน contract** (`ProductGateway`) ไม่แตะภายใน catalog
+- `preview_adjust` = ดูผลลัพธ์ก่อน **โดยไม่เขียนอะไร**; ติดลบ → ถามก่อน (NEEDS_DECISION)
+- **replay harness**: `InventoryService.replay(events)` สร้างสต็อกกลับจาก event log
+  ล้วนๆ → พิสูจน์ว่า "log คือแหล่งความจริง, state เป็นแค่ภาพฉาย"
+
+```bash
+python organs/inventory/app.py            # เห็น preview -> commit -> ถามตอนติดลบ -> replay
+python -m pytest organs/inventory -q      # 4 เทส รวม replay harness
+python tools/graphify.py                  # เห็น edge inventory -> catalog ใน graph.mmd
+```

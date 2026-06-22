@@ -1,4 +1,16 @@
 graph TD
+  catalog["catalog\n(slice-proven)"]
+  catalog__jsonl_repository(["jsonl_repository"])
+  catalog -. Repository .-> catalog__jsonl_repository
+  catalog__jsonl_logger(["jsonl_logger"])
+  catalog -. Logger .-> catalog__jsonl_logger
+  catalog__demo_inbound(["demo_inbound"])
+  catalog -. Inbound .-> catalog__demo_inbound
+  inventory["inventory\n(slice-proven)"]
+  inventory__catalog_gateway(["catalog_gateway"])
+  inventory -. ProductGateway .-> inventory__catalog_gateway
+  inventory__jsonl_logger(["jsonl_logger"])
+  inventory -. Logger .-> inventory__jsonl_logger
   registry["registry\n(slice-proven)"]
   registry__jsonl_member_repo(["jsonl_member_repo"])
   registry -. MemberRepository .-> registry__jsonl_member_repo
@@ -10,3 +22,4 @@ graph TD
   registry -. Inbound .-> registry__telegram_inbound
   registry__demo_inbound(["demo_inbound"])
   registry -. Inbound .-> registry__demo_inbound
+  inventory ==> catalog

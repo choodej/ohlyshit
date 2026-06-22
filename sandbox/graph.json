@@ -1,11 +1,28 @@
 {
   "nodes": [
     {
+      "id": "catalog",
+      "title": "Product Catalog",
+      "status": "slice-proven",
+      "path": "organs/catalog"
+    },
+    {
+      "id": "inventory",
+      "title": "Inventory (preview + replay)",
+      "status": "slice-proven",
+      "path": "organs/inventory"
+    },
+    {
       "id": "registry",
       "title": "สมัครสมาชิก (Registration)",
       "status": "slice-proven",
       "path": "organs/registry"
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "from": "inventory",
+      "to": "catalog"
+    }
+  ]
 }

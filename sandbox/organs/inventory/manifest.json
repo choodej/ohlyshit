@@ -1,0 +1,20 @@
+{
+  "organ": "inventory",
+  "title": "Inventory (preview + replay)",
+  "version": "0.1.0",
+  "language": "python",
+  "status": "slice-proven",
+  "purpose": "ปรับสต็อกสินค้า: ตรวจกับ catalog ผ่าน contract, preview ก่อนเขียน, สถานะสร้างใหม่ได้จาก event log (replay)",
+  "ports": ["ProductGateway", "Logger"],
+  "adapters": {
+    "ProductGateway": ["catalog_gateway"],
+    "Logger": ["jsonl_logger"]
+  },
+  "exposes": [
+    "preview_adjust(sku, delta) -> Result[int]",
+    "adjust(sku, delta, source) -> Result[int]",
+    "replay(events) -> dict[sku,int]"
+  ],
+  "depends_on": ["catalog"],
+  "owns_data": ["inventory.log.jsonl"]
+}

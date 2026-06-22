@@ -1,0 +1,17 @@
+{
+  "organ": "catalog",
+  "title": "Product Catalog",
+  "version": "0.1.0",
+  "language": "python",
+  "status": "slice-proven",
+  "purpose": "ทะเบียนสินค้า: เพิ่มสินค้า (sku/label) + กันชื่อซ้ำ — เป็น upstream ของ inventory",
+  "ports": ["Repository", "Logger", "Inbound"],
+  "adapters": {
+    "Repository": ["jsonl_repository"],
+    "Logger": ["jsonl_logger"],
+    "Inbound": ["demo_inbound"]
+  },
+  "exposes": ["submit(label, source) -> Result[Item]"],
+  "depends_on": [],
+  "owns_data": ["catalog.jsonl", "catalog.log.jsonl"]
+}
